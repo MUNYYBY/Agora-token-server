@@ -50,7 +50,7 @@ const generateRTCToken = (req, resp) => {
   // get the expire time
   let expireTime = req.query.expiry;
   if (!expireTime || expireTime === "") {
-    expireTime = 3600;
+    expireTime = 86400;
   } else {
     expireTime = parseInt(expireTime, 10);
   }
