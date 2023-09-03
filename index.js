@@ -34,9 +34,17 @@ const generateRTCToken = (req, resp) => {
     return resp.status(400).json({ error: "channel is required" });
   }
   // get uid
+  //get userAccount
   let uid = req.params.uid;
-  if (!uid || uid === "") {
-    return resp.status(400).json({ error: "uid is required" });
+  let userAccount = req.params.userAccount;
+  if (!uid || (uid === "" && !userAccount) || userAccount === "") {
+    return resp
+      .status(400)
+      .json({ error: "Either uid or userAccount is required" });
+  } else if (userAccount && uid) {
+    return resp.status(400).json({
+      error: "Only enter userAccount or uid. You can not enter both!",
+    });
   }
   // get role
   let role;
@@ -64,7 +72,7 @@ const generateRTCToken = (req, resp) => {
       APP_ID,
       APP_CERTIFICATE,
       channelName,
-      uid,
+      userAccount,
       role,
       privilegeExpireTime
     );
