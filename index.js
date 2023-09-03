@@ -37,14 +37,8 @@ const generateRTCToken = (req, resp) => {
   //get userAccount
   let uid = req.params.uid;
   let userAccount = req.params.userAccount;
-  if (!uid || (uid === "" && !userAccount) || userAccount === "") {
-    return resp
-      .status(400)
-      .json({ error: "Either uid or userAccount is required" });
-  } else if (userAccount && uid) {
-    return resp.status(400).json({
-      error: "Only enter userAccount or uid. You can not enter both!",
-    });
+  if (!uid || uid === "") {
+    return resp.status(400).json({ error: "uid is required" });
   }
   // get role
   let role;
@@ -68,15 +62,17 @@ const generateRTCToken = (req, resp) => {
   // build the token
   let token;
   if (req.params.tokentype === "userAccount") {
+    console.log(uid);
     token = RtcTokenBuilder.buildTokenWithAccount(
       APP_ID,
       APP_CERTIFICATE,
       channelName,
-      userAccount,
+      uid,
       role,
       privilegeExpireTime
     );
   } else if (req.params.tokentype === "uid") {
+    console.log(uid);
     token = RtcTokenBuilder.buildTokenWithUid(
       APP_ID,
       APP_CERTIFICATE,
